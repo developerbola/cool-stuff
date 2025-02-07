@@ -6,17 +6,8 @@
     <title>Get Dominant Color of Image</title>
   </head>
   <body>
-    <img
-      src="https://mutawirr.vercel.app/portrait.jpg"
-      alt=""
-      id="image"
-      height="200px"
-      width="200px"
-    />
+    <img src="" alt="" id="image" height="200px" width="200px" />
     <input type="file" id="file" />
-    <div>
-      <span id="dominant" style="font-size: 30px; padding: 10px"></span>
-    </div>
     <div id="palette" style="display: flex; flex-wrap: wrap"></div>
 
     <script>
@@ -82,10 +73,6 @@
 
               const bg = `rgb(${sortedColors[0]})`;
               const color = `rgb(${sortedColors[1]})`;
-
-              document.getElementById("dominant").innerText = bg;
-              document.getElementById("dominant").style.background = bg;
-              document.getElementById("dominant").style.color = color;
             };
           };
           reader.readAsDataURL(file);
