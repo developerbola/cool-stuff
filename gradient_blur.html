@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gradient Blur</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      :root {
+        --bg: url(./IMAGE_URL);
+        --size: 400px;
+      }
+      body {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+      }
+
+      .something {
+        position: relative;
+        background: var(--bg);
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px;
+        height: var(--size);
+        width: var(--size);
+        overflow: hidden;
+      }
+
+      .something::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: var(--bg);
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px;
+        height: 100%;
+        width: 100%;
+        filter: blur(20px);
+        transform: scale(125%);
+        mask: linear-gradient(
+          transparent,
+          transparent,
+          transparent,
+          black,
+          black
+        );
+      }
+    </style>
+  </head>
+  <body>
+    <div class="something"></div>
+  </body>
+</html>

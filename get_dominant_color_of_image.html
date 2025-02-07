@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Get Dominant Color of Image</title>
+  </head>
+  <body>
+    <img
+      src="https://mutawirr.vercel.app/portrait.jpg"
+      alt=""
+      id="image"
+      height="200px"
+      width="200px"
+    />
+    <input type="file" id="file" />
+    <div>
+      <span id="dominant" style="font-size: 30px; padding: 10px"></span>
+    </div>
+    <div id="palette" style="display: flex; flex-wrap: wrap"></div>
+
+    <script>
+      document
+        .getElementById("file")
+        .addEventListener("change", function (event) {
+          const file = event.target.files[0];
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const img = document.getElementById("image");
+            img.src = e.target.result;
+            img.style.display = "block";
+            img.onload = () => {
+              const canvas = document.createElement("canvas");
+              const context = canvas.getContext("2d");
+
+              canvas.width = 1000;
+              canvas.height = 1000;
+              context.drawImage(img, 0, 0, 1000, 1000);
+
+              const imageData = context.getImageData(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+              );
+              const pixels = imageData.data;
+              const saveColors = [];
+              const colorCounts = {};
+              for (let i = 0; i < pixels.length; i += 4) {
+                const r = Math.floor(parseInt(pixels[i]));
+                const g = Math.floor(parseInt(pixels[i + 1]));
+                const b = Math.floor(parseInt(pixels[i + 2]));
+                const color = `${r},${g},${b}`;
+                colorCounts[color] = (colorCounts[color] || 0) + 1;
+              }
+
+              var sortedColors = Object.entries(colorCounts)
+                .sort((a, b) => b[1] - a[1])
+                .map(([color]) => color);
+
+              for (let i = 0; i < 100; i++) {
+                if (sortedColors[i] !== undefined) {
+                  const [r, g, b] = sortedColors[i].split(",");
+
+                  if (sortedColors[i]) {
+                    saveColors.push(sortedColors[i]);
+                  }
+                }
+              }
+
+              const palette = document.getElementById("palette");
+              palette.innerHTML = ""; // Clear previous palette
+
+              saveColors.map((scolor) => {
+                const newSpan = document.createElement("span");
+                const colorSpan = palette.appendChild(newSpan);
+                newSpan.style.height = "50px";
+                newSpan.style.width = "50px";
+                newSpan.style.display = "block";
+                newSpan.style.background = `rgb(${scolor})`;
+              });
+
+              const bg = `rgb(${sortedColors[0]})`;
+              const color = `rgb(${sortedColors[1]})`;
+
+              document.getElementById("dominant").innerText = bg;
+              document.getElementById("dominant").style.background = bg;
+              document.getElementById("dominant").style.color = color;
+            };
+          };
+          reader.readAsDataURL(file);
+        });
+    </script>
+  </body>
+</html>
